@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">BullsAndCows</string>
+    <string name="new_game">NEW GAME</string>
+    <string name="resign">RESIGN</string>
+    <string name="enter_4_digit_number">Enter 4-digit number</string>
+    <string name="check">CHECK</string>
 </resources>
