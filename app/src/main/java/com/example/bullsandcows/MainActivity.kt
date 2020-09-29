@@ -2,12 +2,11 @@ package com.example.bullsandcows
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
@@ -26,7 +25,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var r: Random
     private lateinit var randomList: List<Int>
     private var generatedNumber = arrayListOf<Int>()
-   private var mnewGuess = ArrayList<Int>()
+    private var mnewGuess = IntArray(4)
+    private var mTestArray: ArrayList<Int> = ArrayList()
+    var temp: Int = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,81 +49,107 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun generateRandom() {
-        randomList = (1..9).shuffled().take(4)
-       generatedNumber = randomList as ArrayList<Int>
+        val randomList = (1..9).shuffled().take(4)
+        //generate first digit
+        generatedNumber.add(randomList[0])
+        //generate second digit
+        generatedNumber.add(randomList[1])
+        //generate third digit
+        generatedNumber.add(randomList[2])
+        //generate forth digit
+        generatedNumber.add(randomList[3])
     }
-
-
 
     @SuppressLint("SetTextI18n")
     fun initClick() {
+
+
         resignButton.setOnClickListener(View.OnClickListener {
-
-
-            notificationTV.text = myNumber.toString()
+            resignButton.isEnabled = false
+            checkButton.isEnabled = false
+            notificationTV.text =
                 "You lost! The Number is " + generatedNumber[0] + generatedNumber[1] + generatedNumber[2] + generatedNumber[3]
         })
+        checkButton.setOnClickListener {
 
-        checkButton.setOnClickListener(View.OnClickListener {
+            gettingUserNumber(myNumber)
 
-            var setOfUserNumber = setOf(mnewGuess)
 
-            if (setOfUserNumber.size != mnewGuess.size) {
-                notificationTV.text = "Wrong input! enter unique digits"
-            }
-            if (tries >= 10) {
+//            Log.i("logArrayEllements", mTestArray.toString())
+            if (mTestArray.size != mTestArray.toSet().size || mTestArray.size > 4) {
+                resignButton.isEnabled = false
+                checkButton.isEnabled = false
+                notificationTV.text = "Wrong input! enter unique digits "
+                resignButton.isEnabled = false
+                checkButton.isEnabled = false
+
+            } else if (tries >= 10) {
                 resignButton.isEnabled = false
                 checkButton.isEnabled = false
                 notificationTV.text =
                     "You lost! The Number is " + generatedNumber[0] + generatedNumber[1] + generatedNumber[2] + generatedNumber[3]
-
             } else {
-                checkNumber(generatedNumber,mnewGuess )
+                checkNumber(generatedNumber, mTestArray)
                 checkWin()
+                bullCounter = 0
+                cowCounter = 0
             }
-
-        })
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun checkWin() {
-
-        if (bullCounter == 4) {
-            resignButton.isEnabled = false
-            checkButton.isEnabled = false
-            notificationTV.text = "You won in " + tries + " tries"
+        }
+        newGameButton.setOnClickListener {
+            newGame()
         }
     }
 
-
-    private fun checkNumber(arrayList1: ArrayList<Int>, arrayList2: ArrayList<Int>) {
-
-        if(arrayList1[0]==arrayList2[0]) bullCounter++
-        if(arrayList1[1]==arrayList2[1]) bullCounter++
-        if(arrayList1[2]==arrayList2[2]) bullCounter++
-        if(arrayList1[3]==arrayList2[3]) bullCounter++
-
-        if(arrayList1.contains(arrayList2[0])) cowCounter++
-        if(arrayList1.contains(arrayList2[1])) cowCounter++
-        if(arrayList1.contains(arrayList2[2])) cowCounter++
-        if(arrayList1.contains(arrayList2[3])) cowCounter++
-//        for(num in arrayList1){
-//            for (vals in arrayList2){
-//                if (arrayList1[num] == arrayList2[vals]){
-//                    if (num==vals){
-//                        bullCounter++
-//                    }
-//                    cowCounter++
-//                }
-//            }
-//        }
-        //incrementing number of trys
-
-        tries++
-        output = output + "Try : $tries. $bullCounter bulls, $cowCounter - cows \n "
-        gameInfo.text = output
-
+    private fun newGame() {
+        resignButton.isEnabled = true
+        checkButton.isEnabled = true
+        gameInfo.text = ""
+        notificationTV.text = ""
+        generatedNumber.clear()
+        mTestArray.clear()
+        output = ""
+        generateRandom()
+        initClick()
+        tries = 0
+        myNumber.text = ""
     }
 
+    private fun checkWin() {
+        if (bullCounter == 4) {
+            resignButton.isEnabled = false
+            checkButton.isEnabled = false
+            notificationTV.text = "You won in $tries tries"
+        }
+    }
 
+    private fun checkNumber(arrayGenerated: ArrayList<Int>, arrayList2: ArrayList<Int>) {
+        bullCounter = 0
+        cowCounter = 0
+        for (i in arrayGenerated.indices) {
+            for (j in arrayList2.indices) {
+                if (arrayGenerated[i] == arrayList2[j]) {
+                    if (i == j) {
+                        bullCounter++
+                        continue
+                    }
+                    cowCounter++
+                }
+            }
+        }
+        //incrementing number of tries
+        tries++
+        output += "Try : $tries. Your number is : $temp.  $bullCounter bulls, $cowCounter - cows \n "
+        gameInfo.text = output
+    }
+
+    private fun gettingUserNumber(textView: TextView): ArrayList<Int> {
+        mTestArray.clear()
+        temp = textView.text.toString().toInt()
+        var newGuess: IntArray
+        newGuess = temp.toString().chars().map { c: Int -> c - '0'.toInt() }.toArray()
+        for (i in newGuess.indices) {
+            mTestArray.add(newGuess[i])
+        }
+        return mTestArray
+    }
 }
