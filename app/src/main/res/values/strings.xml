@@ -6,4 +6,6 @@
     <string name="check">CHECK</string>
     <string name="info_text">info text</string>
     <string name="i_surender">I SURENDER</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
