@@ -83,6 +83,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    @SuppressLint("SetTextI18n")
     fun initClick() {
         minusA.setOnClickListener(View.OnClickListener {
             if (guessA > 0) {
@@ -136,7 +137,8 @@ class MainActivity : AppCompatActivity() {
 
         resignButton.setOnClickListener(View.OnClickListener {
             tv_input.text =
-                "You lost! The Number is " + generatedA + " " + generatedB + " " + generatedC + " " + generatedD
+                "You lost! The Number is $generatedA $generatedB $generatedC $generatedD"
+
         })
 
 
@@ -151,7 +153,7 @@ class MainActivity : AppCompatActivity() {
                 resignButton.isEnabled = false
                 checkButton.isEnabled = false
                 tv_input.text =
-                    "You lost! The Number is " + generatedA + " " + generatedB + " " + generatedC + " " + generatedD
+                    "You lost! The Number is $generatedA $generatedB $generatedC $generatedD"
 
 
             } else {
