@@ -2,42 +2,47 @@ package com.example.bullsandcows
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.CountDownTimer
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
-import kotlin.random.Random
-
 
 class GameFragment : Fragment() {
+    private lateinit var timeTv: TextView
     private lateinit var resignButton: Button
     private lateinit var newGameButton: Button
     private lateinit var notificationTV: TextView
     private lateinit var gameInfo: TextView
     private lateinit var checkButton: Button
     private lateinit var myNumber: TextView
-    private lateinit var output: String
-    private var bullCounter: Int = 0
-    private var cowCounter: Int = 0
-    private var tries: Int = 0
-    private var seed: Int = 0
-    private lateinit var r: Random
-    private lateinit var randomList: List<Int>
+    private lateinit var saveButton:ImageButton
     private var generatedNumber = arrayListOf<Int>()
-    private var mTestArray: ArrayList<Int> = ArrayList()
-    var temp: Int = 0
     private lateinit var mActivity: MainActivity
+    private var minutes = 0
+    private var seconds = 0
+    private var sMinutes = ""
+    private var sSeconds = ""
+    private var miliseconds: Long = 300000
+    private var countDown: Long = 1000
 
+    //Declaring GameModel new instance
+    private lateinit var mGameModel: GameModel
 
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
 
-        val view = inflater.inflate(R.layout.fragment_game,container,false)
+        val view = inflater.inflate(R.layout.fragment_game, container, false)
+        //initialising mGameModel
+        mGameModel = GameModel()
 
-
+        getTimer()
+        saveButton = view.findViewById(R.id.saveButton)
+        timeTv = view.findViewById(R.id.timeTv)
         resignButton = view.findViewById(R.id.buttonResign)
         newGameButton = view.findViewById(R.id.newGameButton)
         notificationTV = view.findViewById(R.id.notificationTV)
@@ -45,119 +50,126 @@ class GameFragment : Fragment() {
         myNumber = view.findViewById(R.id.myNumber)
         checkButton = view.findViewById(R.id.checkButton)
         mActivity = activity as MainActivity
-
-        output = ""
+        mGameModel.output = ""
         initClick()
-        r = Random(seed)
-        generateRandom()
-        return view
+        generatedNumber = mGameModel.generateRandom()
+
+
+
+        var bundle = Bundle()
+        // You can use bundle.putxx everything such as String...float..
+        bundle.putSerializable(Util.GAMEARCHIVE_KEY,mGameModel.gameHistory)
+        mActivity.mHistoryFragment.arguments = bundle
+
+          return view
     }
-    private fun generateRandom() {
-        val randomList = (1..9).shuffled().take(4)
-        //generate first digit
-        generatedNumber.add(randomList[0])
-        //generate second digit
-        generatedNumber.add(randomList[1])
-        //generate third digit
-        generatedNumber.add(randomList[2])
-        //generate forth digit
-        generatedNumber.add(randomList[3])
-    }
+
 
     @SuppressLint("SetTextI18n")
     fun initClick() {
-
-
-        resignButton.setOnClickListener(View.OnClickListener {
-            resignButton.isEnabled = false
-            checkButton.isEnabled = false
+        saveButton.setOnClickListener {
+            mGameModel.createRecordToArchive(mGameModel.getGameDate(),mGameModel.tries,generatedNumber.toString())
+            putInBundle()
+        }
+        resignButton.setOnClickListener {
+            buttonsDesable()
             notificationTV.text =
                 "You lost! The Number is " + generatedNumber[0] + generatedNumber[1] + generatedNumber[2] + generatedNumber[3]
-        })
+        }
+
         checkButton.setOnClickListener {
-            mActivity.setFragment(mActivity.mHistoryFragment)
-            gettingUserNumber(myNumber)
 
 
-//            Log.i("logArrayEllements", mTestArray.toString())
-            if (mTestArray.size != mTestArray.toSet().size || mTestArray.size > 4) {
-                resignButton.isEnabled = false
-                checkButton.isEnabled = false
-                notificationTV.text = "Wrong input! enter unique digits "
-                resignButton.isEnabled = false
-                checkButton.isEnabled = false
-
-            } else if (tries >= 10) {
-                resignButton.isEnabled = false
-                checkButton.isEnabled = false
-                notificationTV.text =
-                    "You lost! The Number is " + generatedNumber[0] + generatedNumber[1] + generatedNumber[2] + generatedNumber[3]
+            if (myNumber.text.toString().trim().length < 4) {
+                buttonsDesable()
+                notificationTV.text = "Text your 4-digit number"
+                buttonsEnable()
             } else {
-                checkNumber(generatedNumber, mTestArray)
-                checkWin()
-                bullCounter = 0
-                cowCounter = 0
-                myNumber.text = ""
-            }
-        }
-        newGameButton.setOnClickListener {
-            newGame()
-        }
-    }
+                notificationTV.text = ""
+                mGameModel.gettingUserNumber(myNumber)
 
-    private fun newGame() {
-        resignButton.isEnabled = true
-        checkButton.isEnabled = true
-        gameInfo.text = ""
-        notificationTV.text = ""
-        generatedNumber.clear()
-        mTestArray.clear()
-        output = ""
-        generateRandom()
-        initClick()
-        tries = 0
-        myNumber.text = ""
-    }
+                if (!mGameModel.checkInput()) {
+                    buttonsDesable()
+                    notificationTV.text = "Wrong input! enter unique digits "
+                    buttonsEnable()
 
-    @SuppressLint("SetTextI18n")
-    private fun checkWin() {
-        if (bullCounter == 4) {
-            resignButton.isEnabled = false
-            checkButton.isEnabled = false
-            notificationTV.text = "You won in $tries tries"
-            mActivity.setFragment(mActivity.mHistoryFragment)
-        }
-    }
 
-    private fun checkNumber(arrayGenerated: ArrayList<Int>, arrayList2: ArrayList<Int>) {
-        bullCounter = 0
-        cowCounter = 0
-        for (i in arrayGenerated.indices) {
-            for (j in arrayList2.indices) {
-                if (arrayGenerated[i] == arrayList2[j]) {
-                    if (i == j) {
-                        bullCounter++
-                        continue
-                    }
-                    cowCounter++
+                } else if (!mGameModel.checkTries()) {
+                    buttonsDesable()
+                    notificationTV.text =
+                        "You lost! The Number is " + generatedNumber[0] + generatedNumber[1] + generatedNumber[2] + generatedNumber[3]
+                } else {
+                    mGameModel.checkNumber(mGameModel.generatedNumber, mGameModel.mTestArray)
+                    gameInfo.text = mGameModel.output
+                    checkWin()
+                    myNumber.text = ""
                 }
             }
+            newGameButton.setOnClickListener {
+                newGame()
+            }
         }
-        //incrementing number of tries
-        tries++
-        output += "Try $tries: Your number is : $temp.  $bullCounter bulls, $cowCounter - cows \n "
-        gameInfo.text = output
     }
 
-    private fun gettingUserNumber(textView: TextView): ArrayList<Int> {
-        mTestArray.clear()
-        temp = textView.text.toString().toInt()
-        var newGuess: IntArray
-        newGuess = temp.toString().chars().map { c: Int -> c - '0'.toInt() }.toArray()
-        for (i in newGuess.indices) {
-            mTestArray.add(newGuess[i])
+    fun newGame() {
+        buttonsEnable()
+        getTimer()
+        gameInfo.text = ""
+        notificationTV.text = ""
+        mGameModel.newGame()
+        myNumber.text = ""
+
+    }
+    private fun checkWin() {
+        if (mGameModel.checkWinGame()) {
+            buttonsDesable()
+            notificationTV.text = "You won in ${mGameModel.tries} tries"
         }
-        return mTestArray
+    }
+
+    private fun buttonsDesable() {
+        resignButton.isEnabled = false
+        checkButton.isEnabled = false
+    }
+
+    private fun buttonsEnable() {
+        resignButton.isEnabled = true
+        checkButton.isEnabled = true
+    }
+    fun getTimer(){
+        object : CountDownTimer(miliseconds, countDown) {
+            var millisUntilFinished: Long = 300000
+            override fun onTick(millisUntilFinished: Long) {
+                var miliseconds = millisUntilFinished
+                fun milisecToSec() {
+                    minutes = miliseconds.toInt() / 60000
+                    seconds = ((miliseconds % 60000) / 1000).toInt()
+                }
+                milisecToSec()
+                sMinutes = minutes.toString()
+                sSeconds = seconds.toString()
+                if (sSeconds.length < 2) {
+                    sSeconds = "0$sSeconds"
+                }
+                timeTv.setText("Time remaining: $sMinutes:$sSeconds")
+
+            }
+
+            override fun onFinish() {
+                timeTv.setText("Done!")
+
+            }
+
+        }.start()
+    }
+
+    fun putInBundle(){
+        var bundle = Bundle()
+
+        bundle.putSerializable(Util.GAMEARCHIVE_KEY,mGameModel.gameHistory)
+        mActivity.mHistoryFragment.arguments = bundle
     }
 
 }
+
+

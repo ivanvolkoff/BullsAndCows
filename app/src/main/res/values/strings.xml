@@ -8,4 +8,7 @@
     <string name="i_surender">I SURENDER</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="new_game_menu">New Game</string>
+    <string name="history_menu">History</string>
+    <string name="picTure" />
 </resources>

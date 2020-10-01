@@ -1,23 +1,51 @@
 package com.example.bullsandcows
 
+import android.content.Intent
+import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
+import android.view.*
+import android.widget.Button
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+
+import kotlinx.android.synthetic.main.fragment_history.*
+import kotlinx.android.synthetic.main.header_main_menu.*
+
 
 class HistoryFragment : Fragment() {
     private lateinit var mActivity: MainActivity
+    private lateinit var historyRecord : ArrayList<GameArchive>
+    private lateinit var fieldForRecord : TextView
+    private lateinit var backButton : Button
 
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         mActivity = activity as MainActivity
-        return inflater.inflate(R.layout.fragment_history, container, false)
+        val view = inflater.inflate(R.layout.fragment_history, container, false)
+        fieldForRecord = view.findViewById(R.id.recordInfo)
+        backButton = view.findViewById(R.id.backButton)
+
+        backButton.setOnClickListener {
+            mActivity.setFragment(mActivity.mGameFragment)
+        }
+
+        if (arguments?.getSerializable(Util.GAMEARCHIVE_KEY)!=null){
+            historyRecord = arguments?.getSerializable("gameArchive") as ArrayList<GameArchive>
+
+        }
+        fieldForRecord.text = historyRecord.toString()
+        return view
     }
+
+
+
 
 
 }

@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:background="@drawable/metalsafe"
+    android:persistentDrawingCache="animation"
     tools:context=".GameFragment">
 
 
@@ -37,13 +39,15 @@
         android:layout_height="42dp"
         android:layout_marginTop="452dp"
         android:autofillHints=""
+        android:background="@drawable/rounded_corner"
+        android:backgroundTint="#27009688"
         android:ems="10"
-        android:hint="@string/enter_4_digit_number"
+        android:foregroundTint="#673AB7"
         android:inputType="number"
         android:keyboardNavigationCluster="false"
         android:maxLength="4"
         android:textAlignment="center"
-        android:textColor="#F3F1F1"
+        android:textColor="#000000"
         android:textColorHint="#0E0E0E"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@+id/buttonResign"
@@ -70,24 +74,25 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
         android:background="@drawable/rounded_corner"
-        android:backgroundTint="#F4EBEB"
+        android:backgroundTint="#19009688"
         android:fontFamily="serif"
         android:includeFontPadding="true"
-        android:textColor="#595252"
+        android:stateListAnimator="@android:anim/linear_interpolator"
+        android:textColor="#EEEDF1"
         android:textSize="18sp"
         android:textStyle="bold"
         app:constraint_referenced_ids="10do"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/buttonResign"
-        app:layout_constraintTop_toBottomOf="@+id/buttonResign"
-        tools:text="texttexttext" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonResign" />
 
     <TextView
         android:id="@+id/notificationTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:textColor="#F8F3F3"
+        android:background="#A61010"
+        android:textColor="#151414"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/gameInfo"
         app:layout_constraintStart_toStartOf="@+id/gameInfo"
@@ -103,6 +108,41 @@
         app:layout_constraintStart_toStartOf="@+id/checkButton"
         app:layout_constraintTop_toTopOf="@+id/checkButton"
         app:srcCompat="@drawable/ic_baseline_vpn_key_24" />
+
+    <TextView
+        android:id="@+id/timeTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        android:textColor="#F31202"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.948"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Enter 4-digit number :"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/myNumber"
+        app:layout_constraintStart_toStartOf="@+id/myNumber" />
+
+    <ImageButton
+        android:id="@+id/saveButton"
+        android:layout_width="73dp"
+        android:layout_height="39dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_baseline_move_to_inbox_24"
+        app:layout_constraintBottom_toTopOf="@+id/checkButton"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
