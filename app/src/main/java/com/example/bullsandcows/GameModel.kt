@@ -3,77 +3,54 @@ package com.example.bullsandcows
 import android.widget.TextView
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import kotlin.random.Random
+import kotlin.collections.ArrayList
 
 class GameModel() {
 
-    var bullCounter: Int = 0
-    var cowCounter: Int = 0
-    var dateInString:String = getGameDate()
-    private lateinit var r: Random
-    var generatedNumber = arrayListOf<Int>()
-    var mTestArray: ArrayList<Int> = ArrayList()
-    var temp: Int = 0
-    private lateinit var mActivity: MainActivity
-    private var mDateTime = LocalDateTime.now()
-    private lateinit var mGameArchive : GameArchive
-    var tries: Int = 0
-    var output: String = ""
-    var gameHistory  = arrayListOf<GameArchive>()
+    var mBullCounter: Int = 0
+    var mCowCounter: Int = 0
+    var mGeneratedNumber = arrayListOf<Int>()
+    var mUserNumbers: ArrayList<Int> = ArrayList()
+    var mTemp: Int = 0
+    private lateinit var mGameArchive: GameArchive
+    var mTries: Int = 0
+    var mOutput: String = ""
+    var mGameHistory = arrayListOf<GameArchive>()
+
+
+
+// list with rundom numbers
 
 
     fun generateRandom(): ArrayList<Int> {
         val randomList = (1..9).shuffled().take(4)
+        mGeneratedNumber.addAll(randomList)
 
-        //generate first digit
-        generatedNumber.add(randomList[0])
-        //generate second digit
-        generatedNumber.add(randomList[1])
-        //generate third digit
-        generatedNumber.add(randomList[2])
-        //generate forth digit
-        generatedNumber.add(randomList[3])
-
-        return generatedNumber
-
+        return mGeneratedNumber
     }
 
+    //getting user input
 
     fun gettingUserNumber(textView: TextView): ArrayList<Int> {
-        mTestArray.clear()
-        temp = textView.text.toString().toInt()
+        //clear list from privious turn
+        mUserNumbers.clear()
+        //getting users imput
+        mTemp = textView.text.toString().toInt()
         var newGuess: IntArray
-        newGuess = temp.toString().chars().map { c: Int -> c - '0'.toInt() }.toArray()
+        //numbers to
+        newGuess = mTemp.toString().chars().map { c: Int -> c - '0'.toInt() }.toArray()
         for (i in newGuess.indices) {
-            mTestArray.add(newGuess[i])
+            mUserNumbers.add(newGuess[i])
         }
-        return mTestArray
+        return mUserNumbers
     }
 
-    fun checkNumber(arrayGenerated: ArrayList<Int>, arrayList2: ArrayList<Int>) {
-        bullCounter = 0
-        cowCounter = 0
-        for (i in arrayGenerated.indices) {
-            for (j in arrayList2.indices) {
-                if (arrayGenerated[i] == arrayList2[j]) {
-                    if (i == j) {
-                        bullCounter++
-                        continue
-                    }
-                    cowCounter++
-                }
-            }
-        }
-        //incrementing number of tries
-        tries++
-        output += "Try $tries: Your number is : $temp  $bullCounter bulls, $cowCounter - cows\n"
 
-
-    }
+    // check input for empty text, for number of digits and uniqness of the digits
 
     fun checkInput(): Boolean {
-        if (mTestArray.size != 4) return false
-        else if (mTestArray.size != mTestArray.toSet().size) {
+        if (mUserNumbers.size != 4) return false
+        else if (mUserNumbers.size != mUserNumbers.toSet().size) {
             return false
         }
 
@@ -81,45 +58,71 @@ class GameModel() {
     }
 
     fun checkTries(): Boolean {
-        if (tries > 9) {
+        if (mTries > 9) {
             return false
         }
         return true
     }
 
+    //check bull counter for constatating victory
     fun checkWinGame(): Boolean {
-        if (bullCounter == 4) {
+        if (mBullCounter == 4) {
             return true
         }
         return false
     }
 
+
+//setting up a new game
+
+
     fun newGame() {
         generateRandom()
-        generatedNumber.clear()
-        mTestArray.clear()
-        output = ""
-        generatedNumber = generateRandom()
-        tries = 0
+        mGeneratedNumber.clear()
+        mUserNumbers.clear()
+        mOutput = ""
+        mGeneratedNumber = generateRandom()
+        mTries = 0
     }
 
-    fun getGameDate():String{
-        val current = LocalDateTime.now()
 
+    //comparing  random number with user number
+
+    fun checkNumber(arrayGenerated: ArrayList<Int>, arrayList2: ArrayList<Int>) {
+        mBullCounter = 0
+        mCowCounter = 0
+        for (i in arrayGenerated.indices) {
+            for (j in arrayList2.indices) {
+                if (arrayGenerated[i] == arrayList2[j]) {
+                    if (i == j) {
+                        mBullCounter++
+                        continue
+                    }
+                    mCowCounter++
+                }
+            }
+        }
+        //incrementing number of tries
+        mTries++
+        mOutput += "Try $mTries: Your number is : $mTemp  $mBullCounter bulls, $mCowCounter - cows\n"
+
+
+    }
+
+    //getting game date
+    fun getGameDate(): String {
+        val current = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
         val formatted = current.format(formatter)
-
-      return formatted
+        return formatted
     }
 
-    fun createRecordToArchive(gameName:String, gameTries:Int, randomNumGenerated:String){
-        mGameArchive = GameArchive(gameName,gameTries,randomNumGenerated)
-        gameHistory.add(mGameArchive)
+    // make record to Game Archive
+
+    fun createRecordToArchive(gameName: String, gameTries: Int, randomNumGenerated: String) {
+        mGameArchive = GameArchive(gameName, gameTries, randomNumGenerated)
+        mGameHistory.add(mGameArchive)
     }
-
-
-
-
 
 
 }

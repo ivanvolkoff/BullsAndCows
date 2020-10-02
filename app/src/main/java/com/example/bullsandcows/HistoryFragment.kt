@@ -18,7 +18,6 @@ class HistoryFragment : Fragment() {
     private lateinit var mActivity: MainActivity
     private lateinit var historyRecord : ArrayList<GameArchive>
     private lateinit var fieldForRecord : TextView
-    private lateinit var backButton : Button
 
 
     @SuppressLint("SetTextI18n")
@@ -29,18 +28,20 @@ class HistoryFragment : Fragment() {
         // Inflate the layout for this fragment
         mActivity = activity as MainActivity
         val view = inflater.inflate(R.layout.fragment_history, container, false)
-        fieldForRecord = view.findViewById(R.id.recordInfo)
-        backButton = view.findViewById(R.id.backButton)
+        fieldForRecord = view.findViewById(R.id.historyList)
+        var output:String = ""
 
-        backButton.setOnClickListener {
-            mActivity.setFragment(mActivity.mGameFragment)
-        }
+
 
         if (arguments?.getSerializable(Util.GAMEARCHIVE_KEY)!=null){
             historyRecord = arguments?.getSerializable("gameArchive") as ArrayList<GameArchive>
 
         }
-        fieldForRecord.text = historyRecord.toString()
+        for (i in historyRecord.indices){
+            output += "${historyRecord[i].gameName}                 ${historyRecord[i].tries}                       ${historyRecord[i].number} \n"
+
+        }
+        fieldForRecord.text = output
         return view
     }
 

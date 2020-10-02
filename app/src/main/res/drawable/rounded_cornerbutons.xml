@@ -4,7 +4,7 @@
         android:width="1dp"
         android:color="@color/common_border_color" />
 
-    <solid android:color="#D5B699" />
+    <solid android:color="#3A5F5D" />
 
     <padding
         android:left="1dp"
