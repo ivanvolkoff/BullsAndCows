@@ -28,8 +28,8 @@ class HistoryFragment : Fragment() {
         // Inflate the layout for this fragment
         mActivity = activity as MainActivity
         val view = inflater.inflate(R.layout.fragment_history, container, false)
-        fieldForRecord = view.findViewById(R.id.historyList)
-        var output:String = ""
+        fieldForRecord = view.findViewById(R.id.mHistoryList)
+        var output= ""
 
 
 
