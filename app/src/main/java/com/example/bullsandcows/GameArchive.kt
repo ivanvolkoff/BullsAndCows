@@ -1,3 +1,9 @@
 package com.example.bullsandcows
 
-data class GameArchive(var gameName: String, var tries: Int, var number: String)
+import android.os.Parcel
+import android.os.Parcelable
+import java.io.Serializable
+
+data class GameArchive(var gameList:ArrayList<GameModel> ): Serializable{
+
+}

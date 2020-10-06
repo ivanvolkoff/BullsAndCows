@@ -1,21 +1,25 @@
 package com.example.bullsandcows
 
 import android.widget.TextView
+import java.io.Serializable
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.*
 import kotlin.collections.ArrayList
 
-class GameModel() {
+class GameModel() : Serializable{
 
     var mBullCounter: Int = 0
     var mCowCounter: Int = 0
     var mGeneratedNumber = arrayListOf<Int>()
     var mUserNumbers: ArrayList<Int> = ArrayList()
     var mTemp: Int = 0
-    private lateinit var mGameArchive: GameArchive
     var mTries: Int = 0
     var mOutput: String = ""
     var mGameHistory = arrayListOf<GameArchive>()
+     lateinit var date:String
+    var mTotalTries = 10
+    var triesOutput = ""
 
 
 
@@ -57,19 +61,14 @@ class GameModel() {
         return true
     }
 
-    fun checkTries(): Boolean {
-        if (mTries > 9) {
-            return false
-        }
-        return true
-    }
+
 
     //check bull counter for constatating victory
-    fun checkWinGame(): Boolean {
+    fun checkWinGame(): String {
         if (mBullCounter == 4) {
-            return true
+            return "You Win!"
         }
-        return false
+        return ""
     }
 
 
@@ -83,6 +82,7 @@ class GameModel() {
         mOutput = ""
         mGeneratedNumber = generateRandom()
         mTries = 0
+        mTotalTries = 10
     }
 
 
@@ -103,11 +103,14 @@ class GameModel() {
             }
         }
         //incrementing number of tries
+        mTotalTries --
         mTries++
         mOutput += "Try $mTries: Your number is : $mTemp  $mBullCounter bulls, $mCowCounter - cows\n"
+        triesOutput = "$mTotalTries  tries left "
 
 
     }
+
 
     //getting game date
     fun getGameDate(): String {
@@ -119,10 +122,7 @@ class GameModel() {
 
     // make record to Game Archive
 
-    fun createRecordToArchive(gameName: String, gameTries: Int, randomNumGenerated: String) {
-        mGameArchive = GameArchive(gameName, gameTries, randomNumGenerated)
-        mGameHistory.add(mGameArchive)
-    }
+
 
 
 }

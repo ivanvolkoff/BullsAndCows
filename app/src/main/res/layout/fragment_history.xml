@@ -6,14 +6,32 @@
     android:layout_height="match_parent"
     tools:context=".HistoryFragment">
 
-    <TextView
-        android:id="@+id/mHistoryList"
-        android:layout_width="0dp"
+
+    <Button
+        android:id="@+id/saveGame"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginEnd="4dp"
+        android:text="SAVE"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/deleteGame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:text="DELETE"
+        app:layout_constraintEnd_toStartOf="@+id/saveGame"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="40dp"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="1dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+
