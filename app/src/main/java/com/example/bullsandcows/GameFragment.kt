@@ -1,12 +1,10 @@
 package com.example.bullsandcows
 
 
-import android.annotation.SuppressLint
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,9 +14,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import java.io.Serializable
-import java.lang.reflect.Type
+
 
 
 class GameFragment : Fragment(), Runnable, Serializable {
@@ -126,6 +123,7 @@ class GameFragment : Fragment(), Runnable, Serializable {
     fun initClick() {
         triesLeftTV.text = mGameModel.triesOutput
         saveButton.setOnClickListener {
+            mGameModel.date = mGameModel.getGameDate()
             saveData()
             putInBundle()
         }
@@ -144,12 +142,15 @@ class GameFragment : Fragment(), Runnable, Serializable {
                 buttonsDesable()
                 notificationTV.text = "Text your 4-digit number"
                 buttonsEnable()
-                triesLeftTV.text = mGameModel.triesOutput
-            } else {
+            }
+            else {
                 //sending to model fun input and getting it recieving it in array of numbers
+
+
                 notificationTV.text = ""
                 mGameModel.gettingUserNumber(myNumber)
                 //check for number of digits
+
                 if (!mGameModel.checkInput()) {
                     buttonsDesable()
                     notificationTV.text = "Number must contain unique digits "
@@ -158,24 +159,27 @@ class GameFragment : Fragment(), Runnable, Serializable {
                 }
                 else if (mGameModel.mTries == 10 ) {
                     buttonsDesable()
-
                 }
                 else {
-                    triesLeftTV.text = mGameModel.triesOutput
+
                     // here the real work happens
                     mGameModel.checkNumber(mGameModel.mGeneratedNumber, mGameModel.mUserNumbers)
                     gameInfo.text = mGameModel.mOutput
-
-                    myNumber.text = mGameModel.checkWinGame()
+                    triesLeftTV.text = mGameModel.triesOutput
+                    notificationTV.text = mGameModel.checkWinGame()
+                    myNumber.text = ""
                 }
 
             }
+
             if(mGameModel.mTries==10){
                 notificationTV.text =
                     "You lost! The Number is " + generatedNumber[0] + generatedNumber[1] + generatedNumber[2] + generatedNumber[3]
             }
 
         }
+
+
         newGameButton.setOnClickListener {
             newGame()
         }
@@ -184,8 +188,9 @@ class GameFragment : Fragment(), Runnable, Serializable {
 
     private fun saveData() {
         mActivity.mHistoryFragment.historyRecord.add(mGameModel)
-        val sharedPreferences: SharedPreferences = mActivity.getSharedPreferences(
-            "shared preferences",
+
+
+        val sharedPreferences: SharedPreferences = mActivity.getSharedPreferences(Util.GAMESAVES_KEY,
             MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
@@ -207,6 +212,7 @@ class GameFragment : Fragment(), Runnable, Serializable {
         //calling new game fun from model class
         mGameModel.newGame()
         myNumber.text = ""
+        triesLeftTV.text = "10 tries left"
     }
 
     //chech number and disabling buttons
@@ -233,7 +239,7 @@ class GameFragment : Fragment(), Runnable, Serializable {
 
 
     override fun run() {
-        TODO("Not yet implemented")
+
     }
 
 

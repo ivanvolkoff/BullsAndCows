@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#A9DABC"
+    android:background="#394589"
     tools:context=".RuleFragment">
 
     <TextView
@@ -15,8 +15,8 @@
         android:layout_marginTop="80dp"
         android:layout_marginEnd="16dp"
         android:text="@string/gameRules"
-        android:textColor="#070707"
-        android:textSize="18sp"
+        android:textColor="#F4EEEE"
+        android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -28,6 +28,7 @@
         android:layout_marginTop="16dp"
         android:text="Rules"
         android:textAlignment="center"
+        android:textColor="#F4EEEE"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

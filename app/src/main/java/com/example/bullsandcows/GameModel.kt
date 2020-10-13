@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
-class GameModel() : Serializable{
+class GameModel() : Serializable {
 
     var mBullCounter: Int = 0
     var mCowCounter: Int = 0
@@ -17,14 +17,12 @@ class GameModel() : Serializable{
     var mTries: Int = 0
     var mOutput: String = ""
     var mGameHistory = arrayListOf<GameArchive>()
-     lateinit var date:String
+    lateinit var date: String
     var mTotalTries = 10
     var triesOutput = ""
 
 
-
 // list with rundom numbers
-
 
     fun generateRandom(): ArrayList<Int> {
         val randomList = (1..9).shuffled().take(4)
@@ -62,15 +60,14 @@ class GameModel() : Serializable{
     }
 
 
-
     //check bull counter for constatating victory
     fun checkWinGame(): String {
-        if (mBullCounter == 4) {
-            return "You Win!"
+        if (mTries <= 10 && mBullCounter == 4) {
+            return "Congratulations you won!!!"
+        } else {
+            return ""
         }
-        return ""
     }
-
 
 //setting up a new game
 
@@ -103,9 +100,9 @@ class GameModel() : Serializable{
             }
         }
         //incrementing number of tries
-        mTotalTries --
+        mTotalTries--
         mTries++
-        mOutput += "Try $mTries: Your number is : $mTemp  $mBullCounter bulls, $mCowCounter - cows\n"
+        mOutput += "Try $mTries: number is: $mTemp. Bulls:$mBullCounter, cows:$mCowCounter\n"
         triesOutput = "$mTotalTries  tries left "
 
 
@@ -123,10 +120,6 @@ class GameModel() : Serializable{
     // make record to Game Archive
 
 
-
-
 }
-
-
 
 

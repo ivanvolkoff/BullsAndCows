@@ -3,6 +3,7 @@ package com.example.bullsandcows
 object Util {
   const  val GAMEARCHIVE_KEY:String = "saveString"
     const val FRAGMENT_KEY:String = "fragmentKey"
+  const val GAMESAVES_KEY = "com.example.bullsandcows.games"
 
     const val SAVEGAME:String="addGameToArchive"
     const val STRING_KEY2:String= "stringKey2"

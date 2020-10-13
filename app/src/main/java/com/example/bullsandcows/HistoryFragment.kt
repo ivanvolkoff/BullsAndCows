@@ -10,15 +10,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.android.synthetic.main.fragment_game.*
 
 import java.lang.reflect.Type
 
-class HistoryFragment : Fragment() {
+class HistoryFragment : Fragment()  {
 
     var adapter: MyAdapter? = null
     private lateinit var mActivity: MainActivity
-     var historyRecord = ArrayList<GameModel>()
+    var historyRecord = ArrayList<GameModel>()
     private lateinit var  rcView: RecyclerView
+
 
 
     @SuppressLint("SetTextI18n")
@@ -35,24 +37,15 @@ class HistoryFragment : Fragment() {
 
         var list = fillArray()
 
-
         rcView.hasFixedSize()
         rcView.layoutManager = LinearLayoutManager(mActivity.mHistoryFragment.context)
         adapter = MyAdapter(list, mActivity)
         rcView.adapter = adapter
-
-
-
-
-
-
-
         return view
     }
-
     private fun loadData(): ArrayList<GameModel> {
         val sharedPreferences: SharedPreferences =
-            mActivity.getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
+            mActivity.getSharedPreferences(Util.GAMESAVES_KEY, Context.MODE_PRIVATE)
         val gson = Gson()
         val json = sharedPreferences.getString("task list", null)
         val type: Type = object : TypeToken<ArrayList<GameModel?>?>() {}.type
@@ -63,9 +56,7 @@ class HistoryFragment : Fragment() {
         }
         return historyRecord
     }
-
-
-     fun fillArray(): ArrayList<HistoryItem>{
+    fun fillArray(): ArrayList<HistoryItem>{
          var list = historyRecord
          var itemList = ArrayList<HistoryItem>()
          for(n in 0..list.size-1){
@@ -73,14 +64,5 @@ class HistoryFragment : Fragment() {
               itemList.add(item)
          }
       return itemList
-
      }
-
-
-
-
-
-
-
-
 }

@@ -2,19 +2,14 @@ package com.example.bullsandcows
 
 import android.os.Bundle
 import android.view.Gravity
+import android.view.KeyEvent
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
-import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_game.*
-import kotlinx.android.synthetic.main.fragment_history.*
-import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelectedListener  {
 
@@ -37,11 +32,11 @@ class MainActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelect
             R.id.new_game_pressed -> {
                 setFragment(mGameFragment)
             }
-            R.id.history_pressed-> {
-               setFragment(mHistoryFragment)
+            R.id.history_pressed -> {
+                setFragment(mHistoryFragment)
 
             }
-            R.id.rule_pressed->{
+            R.id.rule_pressed -> {
                 setFragment(mRuleFragment)
             }
         }
@@ -54,6 +49,11 @@ class MainActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelect
         ft.replace(R.id.mainFrame, fragment, Util.FRAGMENT_KEY)
         ft.commit()
     }
+
+
+
+
+
 }
 
 

@@ -7,7 +7,8 @@
     android:animateLayoutChanges="true"
     android:background="#242A40"
     android:persistentDrawingCache="animation"
-    tools:context=".GameFragment">
+    tools:context=".GameFragment"
+    >
 
     <Button
         android:id="@+id/buttonResign"
@@ -50,7 +51,7 @@
 
     <EditText
         android:id="@+id/myNumber"
-        android:layout_width="167dp"
+        android:layout_width="100dp"
         android:layout_height="42dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="452dp"
@@ -68,6 +69,7 @@
         android:textColorHighlight="#FFFFFF"
         android:textColorHint="#14DA1C"
         android:textStyle="bold"
+        android:gravity="bottom|center_horizontal"
         app:layout_constraintEnd_toStartOf="@+id/checkButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonResign"
@@ -76,8 +78,8 @@
     <Button
         android:id="@+id/checkButton"
         style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="177dp"
-        android:layout_height="45dp"
+        android:layout_width="181dp"
+        android:layout_height="42dp"
         android:layout_marginTop="452dp"
         android:layout_marginEnd="24dp"
         android:background="@drawable/rounded_cornerbutons"
@@ -99,7 +101,7 @@
         android:fontFamily="@font/coming_soon"
         android:includeFontPadding="true"
         android:stateListAnimator="@android:anim/linear_interpolator"
-        android:textColor="#0C0C0C"
+        android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
